@@ -1,0 +1,17 @@
+{
+    "configurations": [
+      {
+        "name": "Linux",
+        "includePath": [
+          "/usr/include/postgresql",  // Path to PostgreSQL headers
+          "${workspaceFolder}/**"     // Recursively search project folder
+        ],
+        "defines": [],
+        "compilerPath": "/usr/bin/gcc",  // Update to your gcc path
+        "cStandard": "c11",              // Update based on your project
+        "cppStandard": "c++17"           // Update if using C++
+      }
+    ],
+    "version": 4
+  }
+  

@@ -3,7 +3,7 @@
 #include <string.h>
 
 #define MAX_BOOKS 100
-
+#define MAX_USERS 100
 struct Book {
     int BI;
     char Book_name[50];
@@ -281,12 +281,12 @@ void admin_login(){
     char olduser_name[20] = "Admin123";
     char old_password[20] = "985123";
 
-    printf("\033[1;36m\n  LOGIN PAGE \033[0m\n");
+    printf("\033[1;36m\n ADMIN LOGIN PAGE \033[0m\n");
 
     while(login_attempts!=0){
         printf("\033[1;32m\nEnter username:\033[0m");
         scanf("%s",user);
-        printf("\033[1;32m\nEnter password:\033[0m");
+        printf("\033[1;32mEnter password:\033[0m");
         scanf("%s",password);
        if((strcmp(olduser_name,user)==0 && strcmp(old_password,password)==0)){
         printf("\nLogged In SuccessFully!\n");
@@ -294,7 +294,7 @@ void admin_login(){
        } 
        else{
         login_attempts--;
-        printf("\033[1;31mInvalid Username or password. Please try again.\033[0m\n");
+        printf("\033[1;31mInvalid Username or password. %d attempts remaining.\033[0m\n",login_attempts);
        }
     }
 
@@ -313,7 +313,7 @@ void customer_login(){
     char olduser_name[20] = "Sidhu-985";
     char old_password[20] = "SST2005";
 
-    printf("\033[1;36m\n  LOGIN PAGE \033[0m\n");
+    printf("\033[1;36m\n CUSTOMER LOGIN PAGE \033[0m\n");
 
     while(login_attempts!=0){
         printf("\033[1;32m\nEnter username:\033[0m");
@@ -326,7 +326,7 @@ void customer_login(){
        } 
        else{
         login_attempts--;
-        printf("\033[1;31mInvalid Username or password. Please try again.\033[0m\n");
+        printf("\033[1;31mInvalid Username or password. %d attempts remaining.\033[0m\n",login_attempts);
        }
     }
 
