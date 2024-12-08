@@ -3,7 +3,7 @@
 #include <string.h>
 
 #define MAX_BOOKS 100
-#define MAX_USERS 100
+
 struct Book {
     int BI;
     char Book_name[50];
@@ -15,58 +15,6 @@ struct Book library[MAX_BOOKS];
 struct Book mylibrary[50];
 int book_count = 0;
 int borrowed_count = 0; 
-
-int is_duplicate_book_id(int Book_id){
-    for(int i=0;i<book_count;i++){
-        if(library[i].BI==Book_id){
-            return 1;
-        }
-    }
-    return 0;
-}
-
-void Add_Book() {
-    if (book_count >= MAX_BOOKS) {
-        printf("\033[1;31mLibrary is full. Cannot add more books.\033[0m\n");
-        return;
-    }
-
-    struct Book *new_book = &library[book_count];
-
-    printf("\033[1;34mEnter Author name: \033[0m");
-    getchar();  
-    scanf("%[^\n]%*c", new_book->Author_name);  
-
-    printf("\033[1;34mEnter Book name: \033[0m");
-    scanf("%[^\n]%*c", new_book->Book_name);  
-
-    printf("\033[1;34mEnter Book ID: \033[0m");
-    while (1) {
-        if (scanf("%d", &new_book->BI) != 1 || new_book->BI<=0) {
-            printf("\033[1;31mInvalid input for Book ID. Please enter a valid number: \033[0m");
-            while (getchar() != '\n'); 
-        } 
-        else if(is_duplicate_book_id(new_book->BI)){
-            printf("\033[1;31mError: Book ID %d already exists. Please enter a unique Book ID: \033[0m", new_book->BI);
-        }
-        else {
-            break;
-        }
-    }
-
-    printf("\033[1;34mEnter price: \033[0m");
-    while (1) {
-        if (scanf("%f", &new_book->price) != 1 || new_book->price <= 0) {
-            printf("\033[1;31mInvalid price input. Please enter a positive number: \033[0m");
-            while (getchar() != '\n');
-        } else {
-            break;
-        }
-    }
-
-    book_count++;
-    printf("\033[1;32mBook added successfully!\033[0m\n");
-}
 
 void Books(){
     strcpy(library[0].Author_name,"JK Rowling");
@@ -140,6 +88,58 @@ void Books(){
     library[13].price = 999.00;
     
     book_count = 14; 
+}
+
+int is_duplicate_book_id(int Book_id){
+    for(int i=0;i<book_count;i++){
+        if(library[i].BI==Book_id){
+            return 1;
+        }
+    }
+    return 0;
+}
+
+void Add_Book() {
+    if (book_count >= MAX_BOOKS) {
+        printf("\033[1;31mLibrary is full. Cannot add more books.\033[0m\n");
+        return;
+    }
+
+    struct Book *new_book = &library[book_count];
+
+    printf("\033[1;34mEnter Author name: \033[0m");
+    getchar();  
+    scanf("%[^\n]%*c", new_book->Author_name);  
+
+    printf("\033[1;34mEnter Book name: \033[0m");
+    scanf("%[^\n]%*c", new_book->Book_name);  
+
+    printf("\033[1;34mEnter Book ID: \033[0m");
+    while (1) {
+        if (scanf("%d", &new_book->BI) != 1 || new_book->BI<=0) {
+            printf("\033[1;31mInvalid input for Book ID. Please enter a valid number: \033[0m");
+            while (getchar() != '\n'); 
+        } 
+        else if(is_duplicate_book_id(new_book->BI)){
+            printf("\033[1;31mError: Book ID %d already exists. Please enter a unique Book ID: \033[0m", new_book->BI);
+        }
+        else {
+            break;
+        }
+    }
+
+    printf("\033[1;34mEnter price: \033[0m");
+    while (1) {
+        if (scanf("%f", &new_book->price) != 1 || new_book->price <= 0) {
+            printf("\033[1;31mInvalid price input. Please enter a positive number: \033[0m");
+            while (getchar() != '\n');
+        } else {
+            break;
+        }
+    }
+
+    book_count++;
+    printf("\033[1;32mBook added successfully!\033[0m\n");
 }
 
 void List_Book() {
