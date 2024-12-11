@@ -18,16 +18,14 @@ struct Book mylibrary[50];
 int book_count = 0;
 int borrowed_count = 0; 
 
-// Structure to hold customer details
 struct Customer {
-    int uniqueID; // Unique number (not array index)
+    int uniqueID;
     char username[50];
     char password[50];
 };
 
-// Array to store customers
 struct Customer customers[MAX_CUSTOMERS];
-int customerCount = 0; // Tracks the number of registered customers
+int customerCount = 0;
 
 void Books(){
     strcpy(library[0].Author_name,"JK Rowling");
@@ -336,7 +334,7 @@ void signUp() {
     }
 
     struct Customer newCustomer;
-    newCustomer.uniqueID = customerCount + 1000; // Generate unique ID (e.g., starting from 1000)
+    newCustomer.uniqueID = customerCount + 1000; 
 
     printf("Enter username: ");
     scanf("%s", newCustomer.username);
@@ -344,14 +342,12 @@ void signUp() {
     printf("Enter password: ");
     scanf("%s", newCustomer.password);
 
-    // Save the new customer in the array
     customers[customerCount] = newCustomer;
     customerCount++;
 
     printf("Sign-up successful! Your unique ID is: %d\n", newCustomer.uniqueID);
 }
 
-// Function to log in an existing customer
 void customer_logIn() {
     int id;
     char username[50], password[50];
@@ -365,7 +361,6 @@ void customer_logIn() {
     printf("Enter password: ");
     scanf("%s", password);
 
-    // Search for the customer by unique ID
     for (int i = 0; i < customerCount; i++) {
         if (customers[i].uniqueID == id &&
             strcmp(customers[i].username, username) == 0 &&
@@ -447,9 +442,9 @@ int main() {
             } else if (choice == 2) {
                 customer_logIn();
                 break;
-                } else if (choice == 3) {
-                    main();
-                    break;
+            } else if (choice == 3) {
+                main();
+                break;
             } else {
             printf("Invalid choice. Try again.\n");
             }
