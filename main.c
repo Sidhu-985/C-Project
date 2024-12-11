@@ -448,6 +448,7 @@ int main() {
                 customer_logIn();
                 break;
                 } else if (choice == 3) {
+                    main();
                     break;
             } else {
             printf("Invalid choice. Try again.\n");
@@ -475,7 +476,23 @@ int main() {
                     if(choic1==1){
                         admin_login();
                     }else if(choic1==2){
-                        customer_logIn();
+                        int choice;
+                        while(1){
+                            printf("\n1. Sign Up\n2. Log In\n3. Exit\n");
+                            printf("Enter your choice: ");
+                            scanf("%d", &choice);
+                            if (choice == 1) {
+                                signUp();
+                                break;
+                            } else if (choice == 2) {
+                                customer_logIn();
+                                break;
+                            } else if (choice == 3) {
+                                break;
+                            } else {
+                                printf("Invalid choice. Try again.\n");
+                            }
+                        }
                     }
                     break;
                 case 5:
@@ -527,6 +544,7 @@ int main() {
                                 customer_logIn();
                                 break;
                             } else if (choice == 3) {
+                                main();
                                 break;
                             } else {
                                 printf("Invalid choice. Try again.\n");
