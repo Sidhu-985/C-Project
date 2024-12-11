@@ -1,8 +1,10 @@
+// Sidharth S
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 #define MAX_BOOKS 100
+#define MAX_CUSTOMERS 100
 
 struct Book {
     int BI;
@@ -15,6 +17,17 @@ struct Book library[MAX_BOOKS];
 struct Book mylibrary[50];
 int book_count = 0;
 int borrowed_count = 0; 
+
+// Structure to hold customer details
+struct Customer {
+    int uniqueID; // Unique number (not array index)
+    char username[50];
+    char password[50];
+};
+
+// Array to store customers
+struct Customer customers[MAX_CUSTOMERS];
+int customerCount = 0; // Tracks the number of registered customers
 
 void Books(){
     strcpy(library[0].Author_name,"JK Rowling");
@@ -89,6 +102,9 @@ void Books(){
     
     book_count = 14; 
 }
+// Sidharth S
+
+// Niranjan
 
 int is_duplicate_book_id(int Book_id){
     for(int i=0;i<book_count;i++){
@@ -162,7 +178,7 @@ void Delete_Book(char Book_T[]) {
     int found = 0;
 
     for (int i = 0; i < book_count; i++) {
-        if (strcmp(library[i].Book_name, Book_T) == 0){
+        if (strcasecmp(library[i].Book_name, Book_T) == 0){
 
             found = 1;
             for (int j = i; j < book_count - 1; j++) {
@@ -179,11 +195,15 @@ void Delete_Book(char Book_T[]) {
     }
 }
 
+// Niranjan
+
+// Shivanand
+
 void Search_Book(char Book_T[]) {
     int found = 0;
 
     for (int i = 0; i < book_count; i++) {
-        if (strcmp(library[i].Book_name, Book_T) == 0) {
+        if (strcasecmp(library[i].Book_name, Book_T) == 0) {
             found = 1;
             printf("\033[1;36mBook found:\033[0m\n");
             printf("\033[1;33mAuthor name:\033[0m %s\n", library[i].Author_name);
@@ -203,10 +223,10 @@ void Borrow_Book(char Book[]) {
     int is_there = 0;
 
     for (int i = 0; i < book_count; i++) {
-        if (strcmp(library[i].Book_name, Book) == 0) {
+        if (strcasecmp(library[i].Book_name, Book) == 0) {
             is_there = 1;
             for (int j = 0; j < borrowed_count; j++) {
-                if (strcmp(mylibrary[j].Book_name, Book) == 0) {
+                if (strcasecmp(mylibrary[j].Book_name, Book) == 0) {
                     printf("\033[1;31mThe book \"%s\" is already borrowed.\033[0m\n", Book);
                     return;
                 }
@@ -233,11 +253,11 @@ void Return_Book(char Book[]){
     int is_there = 0;
 
     for(int i = 0; i < borrowed_count; i++){
-        if(strcmp(mylibrary[i].Book_name, Book) == 0){
+        if(strcasecmp(mylibrary[i].Book_name, Book) == 0){
             is_there = 1;
             
             for(int j = 0; j < book_count; j++){
-                if(strcmp(library[j].Book_name, Book) == 0){
+                if(strcasecmp(library[j].Book_name, Book) == 0){
                     printf("\033[1;31mThe book \"%s\" is already in the library.\033[0m\n", Book);
                     return;
                 }
@@ -273,6 +293,10 @@ void myLibrary() {
     }
 }
 
+// Shivanand
+
+// Panicker
+
 void admin_login(){
     char user[10],password[10];
 
@@ -305,36 +329,53 @@ void admin_login(){
     
 }
 
-void customer_login(){
-    char user[10],password[10];
-
-    int login_attempts=3;
-
-    char olduser_name[20] = "Sidhu-985";
-    char old_password[20] = "SST2005";
-
-    printf("\033[1;36m\n CUSTOMER LOGIN PAGE \033[0m\n");
-
-    while(login_attempts!=0){
-        printf("\033[1;32m\nEnter username:\033[0m");
-        scanf("%s",user);
-        printf("\033[1;32m\nEnter password:\033[0m");
-        scanf("%s",password);
-       if((strcmp(olduser_name,user)==0 && strcmp(old_password,password)==0)){
-        printf("\nLogged In SuccessFully!\n");
-        break;
-       } 
-       else{
-        login_attempts--;
-        printf("\033[1;31mInvalid Username or password. %d attempts remaining.\033[0m\n",login_attempts);
-       }
+void signUp() {
+    if (customerCount >= MAX_CUSTOMERS) {
+        printf("Customer limit reached. Cannot register more customers.\n");
+        return;
     }
 
-    if(login_attempts==0){
-        printf("\033[1;33mToo many failed attempts.Please Try next time!\033[0m\n");
-        exit(0);
+    struct Customer newCustomer;
+    newCustomer.uniqueID = customerCount + 1000; // Generate unique ID (e.g., starting from 1000)
+
+    printf("Enter username: ");
+    scanf("%s", newCustomer.username);
+
+    printf("Enter password: ");
+    scanf("%s", newCustomer.password);
+
+    // Save the new customer in the array
+    customers[customerCount] = newCustomer;
+    customerCount++;
+
+    printf("Sign-up successful! Your unique ID is: %d\n", newCustomer.uniqueID);
+}
+
+// Function to log in an existing customer
+void customer_logIn() {
+    int id;
+    char username[50], password[50];
+
+    printf("Enter your unique ID: ");
+    scanf("%d", &id);
+
+    printf("Enter username: ");
+    scanf("%s", username);
+
+    printf("Enter password: ");
+    scanf("%s", password);
+
+    // Search for the customer by unique ID
+    for (int i = 0; i < customerCount; i++) {
+        if (customers[i].uniqueID == id &&
+            strcmp(customers[i].username, username) == 0 &&
+            strcmp(customers[i].password, password) == 0) {
+            printf("Login successful! Welcome, %s.\n", username);
+            return;
+        }
     }
-    
+    printf("Invalid credentials. Please try again.\n");
+    exit(0);
 }
 
 int menu_admin() {
@@ -381,6 +422,8 @@ int choose_role() {
     return choic1;
 }
 
+// Panicker
+
 int main() {
     char Book_title[50];
 
@@ -388,7 +431,29 @@ int main() {
 
     int choic1 = choose_role();
 
-    (choic1==1)?admin_login():customer_login();
+    if(choic1==1){
+        admin_login();
+    }
+    else if(choic1==2){
+         int choice;
+         while (1) {
+            printf("\n1. Sign Up\n2. Log In\n3. Exit\n");
+            printf("Enter your choice: ");
+            scanf("%d", &choice);
+            
+            if (choice == 1) {
+                signUp();
+                break;
+            } else if (choice == 2) {
+                customer_logIn();
+                break;
+                } else if (choice == 3) {
+                    break;
+            } else {
+            printf("Invalid choice. Try again.\n");
+            }
+        }
+    }
 
     while (1) {
         if (choic1 == 1) {
@@ -407,7 +472,11 @@ int main() {
                     break;
                 case 4:
                     choic1 = choose_role();
-                    (choic1==1)?admin_login():customer_login();
+                    if(choic1==1){
+                        admin_login();
+                    }else if(choic1==2){
+                        customer_logIn();
+                    }
                     break;
                 case 5:
                     printf("\033[1;32mExiting program. Goodbye!\033[0m\n");
@@ -443,7 +512,27 @@ int main() {
                     break;
                 case 6:
                     choic1 = choose_role();
-                    (choic1==1)?admin_login():customer_login();
+                    if(choic1==1){
+                        admin_login();
+                    }else if(choic1==2){
+                        int choice;
+                        while (1) {
+                            printf("\n1. Sign Up\n2. Log In\n3. Exit\n");
+                            printf("Enter your choice: ");
+                            scanf("%d", &choice);
+                            if (choice == 1) {
+                                signUp();
+                                break;
+                            } else if (choice == 2) {
+                                customer_logIn();
+                                break;
+                            } else if (choice == 3) {
+                                break;
+                            } else {
+                                printf("Invalid choice. Try again.\n");
+                            }
+                        }
+                    }
                     break;
                 case 7:
                     printf("\033[1;32mExiting program. Goodbye!\033[0m\n");
