@@ -6,6 +6,8 @@
 #define MAX_BOOKS 100
 #define MAX_CUSTOMERS 100
 
+int main();
+
 struct Book {
     int BI;
     char Book_name[50];
@@ -370,7 +372,7 @@ void customer_logIn() {
         }
     }
     printf("Invalid credentials. Please try again.\n");
-    exit(0);
+    main();
 }
 
 int menu_admin() {
@@ -432,8 +434,8 @@ int main() {
     else if(choic1==2){
          int choice;
          while (1) {
-            printf("\n1. Sign Up\n2. Log In\n3. Exit\n");
-            printf("Enter your choice: ");
+            printf("\033[1;32m\n1. Sign Up\n2. Log In\n3. Exit\033[0m\n\n");
+            printf("\033[1;32mEnter your choice:\033[0m ");
             scanf("%d", &choice);
             
             if (choice == 1) {
@@ -473,8 +475,8 @@ int main() {
                     }else if(choic1==2){
                         int choice;
                         while(1){
-                            printf("\n1. Sign Up\n2. Log In\n3. Exit\n");
-                            printf("Enter your choice: ");
+                            printf("\033[1;32m\n1. Sign Up\n2. Log In\n3. Exit\033[0m\n\n");
+                            printf("\033[1;32mEnter your choice:\033[0m ");
                             scanf("%d", &choice);
                             if (choice == 1) {
                                 signUp();
@@ -529,8 +531,8 @@ int main() {
                     }else if(choic1==2){
                         int choice;
                         while (1) {
-                            printf("\n1. Sign Up\n2. Log In\n3. Exit\n");
-                            printf("Enter your choice: ");
+                            printf("\033[1;32m\n1. Sign Up\n2. Log In\n3. Exit\033[0m\n\n");
+                            printf("\033[1;32mEnter your choice:\033[0m ");
                             scanf("%d", &choice);
                             if (choice == 1) {
                                 signUp();
