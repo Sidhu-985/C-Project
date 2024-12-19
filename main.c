@@ -134,7 +134,6 @@ void Add_Book() {
     while (1) {
         if (scanf("%d", &new_book->BI) != 1 || new_book->BI<=0) {
             printf("\033[1;31mInvalid input for Book ID. Please enter a valid number: \033[0m");
-            while (getchar() != '\n'); 
         } 
         else if(is_duplicate_book_id(new_book->BI)){
             printf("\033[1;31mError: Book ID %d already exists. Please enter a unique Book ID: \033[0m", new_book->BI);
@@ -148,7 +147,6 @@ void Add_Book() {
     while (1) {
         if (scanf("%f", &new_book->price) != 1 || new_book->price <= 0) {
             printf("\033[1;31mInvalid price input. Please enter a positive number: \033[0m");
-            while (getchar() != '\n');
         } else {
             break;
         }
@@ -293,9 +291,32 @@ void myLibrary() {
     }
 }
 
+
+void signUp() {
+    if (customerCount >= MAX_CUSTOMERS) {
+        printf("Customer limit reached. Cannot register more customers.\n");
+        return;
+    }
+
+    struct Customer newCustomer;
+    newCustomer.uniqueID = customerCount + 1000; 
+
+    printf("Enter username: ");
+    scanf("%s", newCustomer.username);
+
+    printf("Enter password: ");
+    scanf("%s", newCustomer.password);
+
+    customers[customerCount] = newCustomer;
+    customerCount++;
+
+    printf("Sign-up successful! Your unique ID is: %d\n", newCustomer.uniqueID);
+}
+
+
 // Shivanand
 
-// Panicker
+// Sidharth P
 
 void admin_login(){
     char user[10],password[10];
@@ -329,44 +350,23 @@ void admin_login(){
     
 }
 
-void signUp() {
-    if (customerCount >= MAX_CUSTOMERS) {
-        printf("Customer limit reached. Cannot register more customers.\n");
-        return;
-    }
-
-    struct Customer newCustomer;
-    newCustomer.uniqueID = customerCount + 1000; 
-
-    printf("Enter username: ");
-    scanf("%s", newCustomer.username);
-
-    printf("Enter password: ");
-    scanf("%s", newCustomer.password);
-
-    customers[customerCount] = newCustomer;
-    customerCount++;
-
-    printf("Sign-up successful! Your unique ID is: %d\n", newCustomer.uniqueID);
-}
-
 void customer_logIn() {
     int id;
     char username[50], password[50];
 
-    printf("Enter your unique ID: ");
+    printf("\033[1;32m\nEnter your unique ID:\033[0m");
     scanf("%d", &id);
 
-    printf("Enter username: ");
+    printf("\033[1;32m\nEnter username:\033[0m");
     scanf("%s", username);
 
-    printf("Enter password: ");
+    printf("\033[1;32mEnter password:\033[0m");
     scanf("%s", password);
-
-    for (int i = 0; i < customerCount; i++) {
-        if (customers[i].uniqueID == id &&
-            strcmp(customers[i].username, username) == 0 &&
-            strcmp(customers[i].password, password) == 0) {
+    
+    if(id-1000 < customerCount && id>=1000){
+        if (customers[id-1000].uniqueID == id &&
+            strcmp(customers[id-1000].username, username) == 0 &&
+            strcmp(customers[id-1000].password, password) == 0) {
             printf("Login successful! Welcome, %s.\n", username);
             return;
         }
@@ -419,7 +419,7 @@ int choose_role() {
     return choic1;
 }
 
-// Panicker
+// Sidharth P
 
 int main() {
     char Book_title[50];
