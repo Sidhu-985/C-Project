@@ -5,6 +5,7 @@
 
 #define MAX_BOOKS 100
 #define MAX_CUSTOMERS 100
+#define MAX_BORROWED_BOOKS 50
 
 int main();
 
@@ -15,93 +16,81 @@ struct Book {
     float price;
 };
 
-struct Book library[MAX_BOOKS];
-struct Book mylibrary[50];
-int book_count = 0;
-int borrowed_count = 0; 
-
 struct Customer {
     int uniqueID;
     char username[50];
     char password[50];
 };
 
+struct Book library[MAX_BOOKS];
 struct Customer customers[MAX_CUSTOMERS];
+struct Book mylibrary[MAX_BORROWED_BOOKS];
+
+int book_count = 0;
+int borrowed_count = 0;
 int customerCount = 0;
 
-void Books(){
-    strcpy(library[0].Author_name,"JK Rowling");
-    strcpy(library[0].Book_name,"Fantastic Beasts and where to Find Them");
-    library[0].BI = 1011;
-    library[0].price = 1200;
+#define BOOK_FILE "books.txt"
+#define CUSTOMER_FILE "customers.txt"
 
-    strcpy(library[1].Author_name,"Matthew Reinhart ");
-    strcpy(library[1].Book_name,"Harry Potter: A Pop-Up Guide to Hogwarts");
-    library[1].BI = 6987;
-    library[1].price = 6900;
-
-    strcpy(library[2].Author_name,"Daniel H. Nexon, Iver B. Neumann ");
-    strcpy(library[2].Book_name,"Prince Prigio");
-    library[2].BI = 12345;
-    library[2].price = 5000;
-    
-    strcpy(library[3].Author_name, "George Orwell");
-    strcpy(library[3].Book_name, "1984");
-    library[3].BI = 2345;
-    library[3].price = 799.00;
-    
-    strcpy(library[4].Author_name, "J.R.R. Tolkien");
-    strcpy(library[4].Book_name, "The Hobbit");
-    library[4].BI = 6789;
-    library[4].price = 999.00;
-    
-    strcpy(library[5].Author_name, "F. Scott Fitzgerald");
-    strcpy(library[5].Book_name, "The Great Gatsby");
-    library[5].BI = 4567;
-    library[5].price = 499.00;
-    
-    strcpy(library[6].Author_name, "Harper Lee");
-    strcpy(library[6].Book_name, "To Kill a Mockingbird");
-    library[6].BI = 9876;
-    library[6].price = 599.00;
-    
-    strcpy(library[7].Author_name, "Jane Austen");
-    strcpy(library[7].Book_name, "Pride and Prejudice");
-    library[7].BI = 1234;
-    library[7].price = 699.00;
-    
-    strcpy(library[8].Author_name, "Mary Shelley");
-    strcpy(library[8].Book_name, "Frankenstein");
-    library[8].BI = 3456;
-    library[8].price = 450.00;
-    
-    strcpy(library[9].Author_name, "Mark Twain");
-    strcpy(library[9].Book_name, "Adventures of Huckleberry Finn");
-    library[9].BI = 7890;
-    library[9].price = 550.00;
-    
-    strcpy(library[10].Author_name, "Lewis Carroll");
-    strcpy(library[10].Book_name, "Alice's Adventures in Wonderland");
-    library[10].BI = 1357;
-    library[10].price = 620.00;
-    
-    strcpy(library[11].Author_name, "Ernest Hemingway");
-    strcpy(library[11].Book_name, "The Old Man and the Sea");
-    library[11].BI = 2468;
-    library[11].price = 770.00;
-    
-    strcpy(library[12].Author_name, "Victor Hugo");
-    strcpy(library[12].Book_name, "Les Misérables");
-    library[12].BI = 1593;
-    library[12].price = 1250.00;
-    
-    strcpy(library[13].Author_name, "Leo Tolstoy");
-    strcpy(library[13].Book_name, "War and Peace");
-    library[13].BI = 3690;
-    library[13].price = 999.00;
-    
-    book_count = 14; 
+void read_books_from_file() {
+    FILE *file = fopen(BOOK_FILE, "r");
+    if (file) {
+        fscanf(file, "%d\n", &book_count);
+        for(int i = 0; i < book_count; i++) {
+            fscanf(file, "%d,%[^,],%[^,],%f\n", 
+                &library[i].BI,
+                library[i].Book_name,
+                library[i].Author_name,
+                &library[i].price);
+        }
+        fclose(file);
+    }
 }
+
+void write_books_to_file() {
+    FILE *file = fopen(BOOK_FILE, "w");
+    if (file) {
+        fprintf(file, "%d\n", book_count);
+        for(int i = 0; i < book_count; i++) {
+            fprintf(file, "%d,%s,%s,%.2f\n", 
+                library[i].BI,
+                library[i].Book_name,
+                library[i].Author_name,
+                library[i].price);
+        }
+        fclose(file);
+    }
+}
+
+void read_customers_from_file() {
+    FILE *file = fopen(CUSTOMER_FILE, "r");
+    if (file) {
+        fscanf(file, "%d\n", &customerCount);
+        for(int i = 0; i < customerCount; i++) {
+            fscanf(file, "%d,%[^,],%[^\n]\n", 
+                &customers[i].uniqueID,
+                customers[i].username,
+                customers[i].password);
+        }
+        fclose(file);
+    }
+}
+
+void write_customers_to_file() {
+    FILE *file = fopen(CUSTOMER_FILE, "w");
+    if (file) {
+        fprintf(file, "%d\n", customerCount);
+        for(int i = 0; i < customerCount; i++) {
+            fprintf(file, "%d,%s,%s\n", 
+                customers[i].uniqueID,
+                customers[i].username,
+                customers[i].password);
+        }
+        fclose(file);
+    }
+}
+
 // Sidharth S
 
 // Niranjan
@@ -155,6 +144,7 @@ void Add_Book() {
     book_count++;
     printf("\033[1;32mBook added successfully!\033[0m\n");
 }
+
 
 void List_Book() {
     if (book_count == 0) {
@@ -291,6 +281,30 @@ void myLibrary() {
     }
 }
 
+// Shivanand
+
+// Sidharth P
+
+int choose_role() {
+    int choic1;
+    printf("\033[1;36m===========================================================\033[0m\n");
+    printf("\033[1;32mWELCOME TO MY LIBRARY MANAGEMENT SYSTEM\033[0m\n");
+    printf("\033[1;36m===========================================================\033[0m\n");
+    printf("\033[1;34mWhich one are you?\033[0m\n");
+    printf("\033[1;33m1) Admin\033[0m\n");
+    printf("\033[1;33m2) Customer\033[0m\n");
+    printf("\033[1;33m3) Exit\033[0m\n");
+    printf("\033[1;34mEnter your choice: \033[0m");
+    while (1) {
+        if (scanf("%d", &choic1) != 1 || choic1 < 1 || choic1 > 3) {
+            printf("\033[1;31mInvalid choice. Please enter a number between 1 and 3: \033[0m");
+            while (getchar() != '\n');  
+        } else {
+            break;
+        }
+    }
+    return choic1;
+}
 
 void signUp() {
     if (customerCount >= MAX_CUSTOMERS) {
@@ -313,16 +327,9 @@ void signUp() {
     printf("Sign-up successful! Your unique ID is: %d\n", newCustomer.uniqueID);
 }
 
-
-// Shivanand
-
-// Sidharth P
-
 void admin_login(){
-    char user[10],password[10];
-
+    char user[10], password[10];
     int login_attempts=3;
-
     char olduser_name[20] = "Admin123";
     char old_password[20] = "985123";
 
@@ -330,24 +337,23 @@ void admin_login(){
 
     while(login_attempts!=0){
         printf("\033[1;32m\nEnter username:\033[0m");
-        scanf("%s",user);
+        scanf("%s", user);
         printf("\033[1;32mEnter password:\033[0m");
-        scanf("%s",password);
-       if((strcmp(olduser_name,user)==0 && strcmp(old_password,password)==0)){
-        printf("\nLogged In SuccessFully!\n");
+        scanf("%s", password);
+       if((strcmp(olduser_name, user)==0 && strcmp(old_password, password)==0)){
+        printf("\nLogged In Successfully!\n");
         break;
        } 
        else{
         login_attempts--;
-        printf("\033[1;31mInvalid Username or password. %d attempts remaining.\033[0m\n",login_attempts);
+        printf("\033[1;31mInvalid Username or password. %d attempts remaining.\033[0m\n", login_attempts);
        }
     }
 
     if(login_attempts==0){
-        printf("\033[1;33mToo many failed attempts.Please Try next time!\033[0m\n");
+        printf("\033[1;33mToo many failed attempts. Please try next time!\033[0m\n");
         exit(0);
     }
-    
 }
 
 void customer_logIn() {
@@ -377,46 +383,46 @@ void customer_logIn() {
 
 int menu_admin() {
     int choice;
-    printf("\033[1;32m\nADMIN\033[0m\n");
-    printf("\033[1;36m\n1: Add Book\033[0m");
-    printf("\033[1;36m\n2: Delete Book\033[0m");
-    printf("\033[1;36m\n3: List Books\033[0m");
-    printf("\033[1;36m\n4: Logout\033[0m");
-    printf("\033[1;36m\n5: Exit Program\033[0m");
-    printf("\n\n\033[1;34mEnter your choice: \033[0m");
-    scanf("%d", &choice);
-    printf("\033[1;36m===========================================================\033[0m\n");
-    return choice;
+    while (1) {
+        printf("\033[1;32m\nADMIN\033[0m\n");
+        printf("\033[1;36m\n1: Add Book\033[0m");
+        printf("\033[1;36m\n2: Delete Book\033[0m");
+        printf("\033[1;36m\n3: List Books\033[0m");
+        printf("\033[1;36m\n4: Logout\033[0m");
+        printf("\033[1;36m\n5: Exit Program\033[0m");
+        printf("\n\n\033[1;34mEnter your choice: \033[0m");
+        
+        if (scanf("%d", &choice) == 1 && choice >= 1 && choice <= 5) {
+            printf("\033[1;36m===========================================================\033[0m\n");
+            return choice;
+        } else {
+            printf("\033[1;31mInvalid choice. Please enter a number between 1 and 5.\033[0m\n");
+            while (getchar() != '\n'); 
+        }
+    }
 }
 
-int menu_customer(){
+int menu_customer() {
     int choice;
-    printf("\033[1;32m\nCUSTOMER\033[0m\n");
-    printf("\033[1;36m\n1: List the Books\033[0m");
-    printf("\033[1;36m\n2: Search Books by Name\033[0m");
-    printf("\033[1;36m\n3: Borrow a Book\033[0m");
-    printf("\033[1;36m\n4: Return a Book\033[0m");
-    printf("\033[1;36m\n5: My Library\033[0m");
-    printf("\033[1;36m\n6: Logout\033[0m");
-    printf("\033[1;36m\n7: Exit Program\033[0m");
-    printf("\n\n\033[1;34mEnter your choice: \033[0m");
-    scanf("%d", &choice);
-    printf("\033[1;36m===========================================================\033[0m\n");
-    return choice;
-}
+    while (1) {
+        printf("\033[1;32m\nCUSTOMER\033[0m\n");
+        printf("\033[1;36m\n1: List the Books\033[0m");
+        printf("\033[1;36m\n2: Search Books by Name\033[0m");
+        printf("\033[1;36m\n3: Borrow a Book\033[0m");
+        printf("\033[1;36m\n4: Return a Book\033[0m");
+        printf("\033[1;36m\n5: My Library\033[0m");
+        printf("\033[1;36m\n6: Logout\033[0m");
+        printf("\033[1;36m\n7: Exit Program\033[0m");
+        printf("\n\n\033[1;34mEnter your choice: \033[0m");
 
-int choose_role() {
-    int choic1;
-    printf("\033[1;36m===========================================================\033[0m\n");
-    printf("\033[1;32mWELCOME TO MY LIBRARY MANAGEMENT SYSTEM\033[0m\n");
-    printf("\033[1;36m===========================================================\033[0m\n");
-    printf("\033[1;34mWhich one are you?\033[0m\n");
-    printf("\033[1;38m\n1: Admin\033[0m");
-    printf("\033[1;38m\n2: Customer\033[0m\n");
-    printf("\n\n\033[1;34mEnter your choice: \033[0m");
-    scanf("%d", &choic1);
-    printf("\033[1;36m===========================================================\033[0m\n");
-    return choic1;
+        if (scanf("%d", &choice) == 1 && choice >= 1 && choice <= 7) {
+            printf("\033[1;36m===========================================================\033[0m\n");
+            return choice;
+        } else {
+            printf("\033[1;31mInvalid choice. Please enter a number between 1 and 7.\033[0m\n");
+            while (getchar() != '\n'); 
+        }
+    }
 }
 
 // Sidharth P
@@ -424,34 +430,38 @@ int choose_role() {
 int main() {
     char Book_title[50];
 
-    Books();
+    read_books_from_file();
+    read_customers_from_file();
 
     int choic1 = choose_role();
-
-    if(choic1==1){
+    
+    if (choic1 == 1) {
         admin_login();
-    }
-    else if(choic1==2){
-         int choice;
-         while (1) {
+    } 
+    else if (choic1 == 2) {
+        int choice;
+        while (1) {
             printf("\033[1;32m\n1. Sign Up\n2. Log In\n3. Exit\033[0m\n\n");
             printf("\033[1;32mEnter your choice:\033[0m ");
-            scanf("%d", &choice);
             
-            if (choice == 1) {
-                signUp();
-                break;
-            } else if (choice == 2) {
-                customer_logIn();
-                break;
-            } else if (choice == 3) {
-                main();
-                break;
+            if (scanf("%d", &choice) == 1) {
+                if (choice == 1) {
+                    signUp();
+                    break;
+                } else if (choice == 2) {
+                    customer_logIn();
+                    break;
+                } else if (choice == 3) {
+                    main();  
+                    break;
+                } 
             } else {
-            printf("Invalid choice. Try again.\n");
+                printf("\033[1;31mInvalid input. Please enter a numeric input.\033[0m\n");
+                while (getchar() != '\n'); 
             }
         }
     }
+
 
     while (1) {
         if (choic1 == 1) {
@@ -470,29 +480,35 @@ int main() {
                     break;
                 case 4:
                     choic1 = choose_role();
-                    if(choic1==1){
+                     if(choic1==1){
                         admin_login();
                     }else if(choic1==2){
                         int choice;
-                        while(1){
+                        while (1) {
                             printf("\033[1;32m\n1. Sign Up\n2. Log In\n3. Exit\033[0m\n\n");
                             printf("\033[1;32mEnter your choice:\033[0m ");
-                            scanf("%d", &choice);
-                            if (choice == 1) {
-                                signUp();
-                                break;
-                            } else if (choice == 2) {
-                                customer_logIn();
-                                break;
-                            } else if (choice == 3) {
-                                break;
-                            } else {
-                                printf("Invalid choice. Try again.\n");
+                            
+                            if (scanf("%d", &choice) == 1) {
+                                if (choice == 1) {
+                                    signUp();
+                                    break;
+                                } else if (choice == 2) {
+                                    customer_logIn();
+                                    break;
+                                } else if (choice == 3) {
+                                    main();
+                                    break;
+                                } 
+                                } else {
+                                    printf("\033[1;31mInvalid input. Please enter a numeric input.\033[0m\n");
+                                    while (getchar() != '\n'); 
                             }
                         }
                     }
                     break;
                 case 5:
+                    write_books_to_file();
+                    write_customers_to_file();
                     printf("\033[1;32mExiting program. Goodbye!\033[0m\n");
                     return 0;
                 default:
@@ -526,30 +542,35 @@ int main() {
                     break;
                 case 6:
                     choic1 = choose_role();
-                    if(choic1==1){
+                     if(choic1==1){
                         admin_login();
                     }else if(choic1==2){
                         int choice;
                         while (1) {
                             printf("\033[1;32m\n1. Sign Up\n2. Log In\n3. Exit\033[0m\n\n");
                             printf("\033[1;32mEnter your choice:\033[0m ");
-                            scanf("%d", &choice);
-                            if (choice == 1) {
-                                signUp();
-                                break;
-                            } else if (choice == 2) {
-                                customer_logIn();
-                                break;
-                            } else if (choice == 3) {
-                                main();
-                                break;
-                            } else {
-                                printf("Invalid choice. Try again.\n");
+                            
+                            if (scanf("%d", &choice) == 1) {
+                                if (choice == 1) {
+                                    signUp();
+                                    break;
+                                } else if (choice == 2) {
+                                    customer_logIn();
+                                    break;
+                                } else if (choice == 3) {
+                                    main();
+                                    break;
+                                } 
+                                } else {
+                                    printf("\033[1;31mInvalid input. Please enter a numeric input.\033[0m\n");
+                                    while (getchar() != '\n'); 
                             }
                         }
                     }
                     break;
                 case 7:
+                    write_books_to_file();
+                    write_customers_to_file();
                     printf("\033[1;32mExiting program. Goodbye!\033[0m\n");
                     return 0;
                 default:
